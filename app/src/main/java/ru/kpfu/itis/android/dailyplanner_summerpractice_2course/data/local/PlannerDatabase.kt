@@ -26,12 +26,5 @@ abstract class PlannerDatabase : RoomDatabase() {
                 instance
             }
         }
-        private suspend fun prepopulateDatabase(context: Context) {
-            val json = context.assets.open("tasks.json").bufferedReader().use { it.readText() }
-            val type = object : TypeToken<List<TaskEntity>>() {}.type
-            val tasks = Gson().fromJson<List<TaskEntity>>(json, type)
-
-            getInstance(context).taskDao().insertAll(tasks)
-        }
     }
 }
