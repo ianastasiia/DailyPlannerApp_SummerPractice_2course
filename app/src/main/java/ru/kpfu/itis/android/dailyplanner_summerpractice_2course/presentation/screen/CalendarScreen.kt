@@ -11,6 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +32,7 @@ import androidx.navigation.NavController
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
 import com.kizitonwose.calendar.core.CalendarDay
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.component.HourTaskList
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.navigation.Screen
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CalendarViewModel
@@ -43,20 +50,34 @@ fun CalendarScreen(
     val selectedDate by viewModel.selectedDate.collectAsState()
     val tasks by viewModel.tasks.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        CalendarView(
-            onDayClick = { date ->
-                viewModel.selectDate(date)
-            },
-            selectedDate = selectedDate
-        )
-
-        HourTaskList(
-            tasks = tasks,
-            onTaskClick = { taskId ->
-                navController.navigate(Screen.CurrentTask.createRoute(taskId = taskId))
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navController.navigate(Screen.CreateEditTask.createRoute()) }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
             }
-        )
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            CalendarView(
+                onDayClick = { date ->
+                    viewModel.selectDate(date)
+                },
+                selectedDate = selectedDate
+            )
+
+            HourTaskList(
+                tasks = tasks,
+                onTaskClick = { taskId ->
+                    navController.navigate(Screen.CurrentTask.createRoute(taskId = taskId))
+                }
+            )
+        }
     }
 }
 

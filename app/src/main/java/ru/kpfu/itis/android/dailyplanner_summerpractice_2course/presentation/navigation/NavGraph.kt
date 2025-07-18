@@ -7,12 +7,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.screen.CalendarScreen
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.screen.CreateEditTaskScreen
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.screen.TaskDetailScreen
 
 sealed class Screen(val route: String) {
     data object Calendar : Screen("calendar")
     data object CurrentTask : Screen("task/{taskId}") {
         fun createRoute(taskId: Long) = "task/$taskId"
+    }
+    data object CreateEditTask : Screen("task/edit/{taskId}") {
+        fun createRoute(taskId: Long = -1L) = "task/edit/$taskId"
     }
 }
 
@@ -31,6 +35,13 @@ fun NavGraph(
         ) { navBackStackEntry ->
             val taskId = navBackStackEntry.arguments?.getLong("taskId") ?: -1L
             TaskDetailScreen(navController = navController, taskId = taskId)
+        }
+        composable(
+            Screen.CreateEditTask.route,
+            arguments = listOf(navArgument("taskId") {type = NavType.LongType})
+        ) { navBackStackEntry ->
+            val taskId = navBackStackEntry.arguments?.getLong("taskId") ?: -1L
+            CreateEditTaskScreen(navController = navController, taskId = taskId)
         }
     }
 }
