@@ -29,6 +29,9 @@
 
     <!-- Time intervals -->
     <string name="hour_format">%02d:00 - %02d:00</string>
+    <string name="time_range">Time: %1$s - %2$s</string>
+    <string name="date_with_value">Date: %s</string>
+    <string name="time_with_value">Time: %s</string>
 
     <!-- Errors -->
     <string name="error_title_empty">Title cannot be empty</string>

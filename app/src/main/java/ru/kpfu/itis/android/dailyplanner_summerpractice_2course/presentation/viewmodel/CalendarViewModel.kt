@@ -23,6 +23,9 @@ class CalendarViewModel @Inject constructor(
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
     val tasks : StateFlow<List<Task>> = _tasks
 
+    private val _startOfDay = MutableStateFlow(0L)
+    val startOfDay: StateFlow<Long> = _startOfDay
+
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
         loadTasksByDate(date)
@@ -30,12 +33,13 @@ class CalendarViewModel @Inject constructor(
 
     private fun loadTasksByDate(date: LocalDate) {
         viewModelScope.launch {
-            val startOfDay = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-            val endOfDay = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1
+            val start = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+            val end = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1
 
+            _startOfDay.value = start
             _tasks.value = getTasksByDateUseCase(
-                dateStart = startOfDay,
-                dateFinish = endOfDay
+                dateStart = start,
+                dateFinish = end
             )
         }
     }

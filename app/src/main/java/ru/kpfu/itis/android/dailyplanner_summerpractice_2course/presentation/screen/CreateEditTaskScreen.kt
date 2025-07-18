@@ -229,15 +229,13 @@ fun DatePickerDialog(
             Column {
                 // Дата
                 Text(
-                    stringResource(R.string.date) + ": " + formatter.format(Date(selectedDate)),
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(R.string.date_with_value, formatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 // Время
                 Text(
-                    stringResource(R.string.time) + ": " + timeFormatter.format(Date(selectedDate)),
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(R.string.time_with_value, timeFormatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 

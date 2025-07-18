@@ -22,16 +22,22 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun HourTaskList(tasks: List<Task>, onTaskClick: (Long) -> Unit) {
+fun HourTaskList(tasks: List<Task>, startOfDay: Long, onTaskClick: (Long) -> Unit) {
     LazyColumn {
         items(24) { hour ->
             val startHour = hour
             val endHour = hour + 1
-            val hourTasks = tasks.filter { task ->
-                val taskStartHour = Instant.ofEpochMilli(task.dateStart).atZone(ZoneId.systemDefault()).hour
-                val taskEndHour = Instant.ofEpochMilli(task.dateFinish).atZone(ZoneId.systemDefault()).hour
+//            val hourTasks = tasks.filter { task ->
+//                val taskStartHour = Instant.ofEpochMilli(task.dateStart).atZone(ZoneId.systemDefault()).hour
+//                val taskEndHour = Instant.ofEpochMilli(task.dateFinish).atZone(ZoneId.systemDefault()).hour
+//
+//                (taskStartHour <= endHour && taskEndHour >= startHour)
+//            }
+            val hourStartMillis = startOfDay + hour * 3_600_000
+            val hourEndMillis = startOfDay + (hour + 1) * 3_600_000
 
-                (taskStartHour <= endHour && taskEndHour >= startHour)
+            val hourTasks = tasks.filter { task ->
+                task.dateStart < hourEndMillis && task.dateFinish > hourStartMillis
             }
 
             Column (
@@ -74,7 +80,11 @@ fun TaskItem(task: Task, onClick: () -> Unit) {
             )
 
             Text(
-                text = "Время: ${formatTime(task.dateStart)} - ${formatTime(task.dateFinish)}",
+                text = stringResource(
+                    R.string.time_range,
+                    formatTime(task.dateStart),
+                    formatTime(task.dateFinish)
+                ),
                 style = MaterialTheme.typography.bodyMedium,
             )
         }

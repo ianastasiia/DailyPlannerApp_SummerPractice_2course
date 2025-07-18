@@ -49,6 +49,7 @@ fun CalendarScreen(
 ) {
     val selectedDate by viewModel.selectedDate.collectAsState()
     val tasks by viewModel.tasks.collectAsState()
+    val startOfDay by viewModel.startOfDay.collectAsState()
 
     Scaffold(
         floatingActionButton = {
@@ -73,6 +74,7 @@ fun CalendarScreen(
 
             HourTaskList(
                 tasks = tasks,
+                startOfDay = startOfDay,
                 onTaskClick = { taskId ->
                     navController.navigate(Screen.CurrentTask.createRoute(taskId = taskId))
                 }
