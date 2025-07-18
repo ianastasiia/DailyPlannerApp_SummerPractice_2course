@@ -13,4 +13,13 @@ class TaskMapper @Inject constructor() {
             dateStart = taskEntity.dateStart,
             dateFinish = taskEntity.dateFinish,
         )
+
+    fun map(task: Task): TaskEntity =
+        TaskEntity(
+            id = task.id,
+            name = task.name,
+            description = task.description,
+            dateStart = task.dateStart,
+            dateFinish = task.dateFinish,
+        )
 }

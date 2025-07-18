@@ -21,4 +21,16 @@ class TaskRepositoryImpl @Inject constructor(
     override suspend fun getTaskById(taskId: Long): Task? {
         return taskDao.getTaskById(taskId = taskId)?.let { taskMapper.map(it) }
     }
+
+    override suspend fun insertTask(task: Task): Long {
+        return taskDao.insertTask(task = taskMapper.map(task = task))
+    }
+
+    override suspend fun updateTask(task: Task) {
+        taskDao.updateTask(task = taskMapper.map(task = task))
+    }
+
+    override suspend fun deleteTaskById(taskId: Long) {
+        taskDao.deleteTaskById(taskId = taskId)
+    }
 }
