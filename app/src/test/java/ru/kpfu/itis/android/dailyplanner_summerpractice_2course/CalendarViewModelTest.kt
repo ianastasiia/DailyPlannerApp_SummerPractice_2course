@@ -3,8 +3,14 @@ package ru.kpfu.itis.android.dailyplanner_summerpractice_2course
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.model.Task
@@ -13,17 +19,25 @@ import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.vie
 import java.time.LocalDate
 import java.time.ZoneId
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CalendarViewModelTest {
-    private val getTasksByDateUseCase = mockk<GetTasksByDateUseCase>()
+    private val testDispatcher = StandardTestDispatcher()
     private lateinit var viewModel: CalendarViewModel
+    private val getTasksByDateUseCase = mockk<GetTasksByDateUseCase>()
 
     @Before
     fun setUp() {
+        Dispatchers.setMain(testDispatcher)
         viewModel = CalendarViewModel(getTasksByDateUseCase)
     }
 
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun `loadTasksByDate should update tasks` () = runTest {
+    fun `loadTasksByDate should update tasks`() = runTest(testDispatcher) {
         // Arrange
         val date = LocalDate.now()
         val start = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
@@ -37,9 +51,9 @@ class CalendarViewModelTest {
 
         // Act
         viewModel.selectDate(date)
+        advanceUntilIdle()
 
         // Assert
-        advanceUntilIdle()
         assertEquals(expectedTasks, viewModel.tasks.value)
     }
 }
