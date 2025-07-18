@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Daily Planner</string>
+
+    <!-- Общие строки -->
+    <string name="back">Назад</string>
+    <string name="edit">Редактировать</string>
+    <string name="delete">Удалить</string>
+    <string name="save">Сохранить</string>
+    <string name="add">Добавить</string>
+    <string name="title">Название</string>
+    <string name="description">Описание</string>
+    <string name="start">Начало</string>
+    <string name="end">Окончание</string>
+    <string name="task_not_found">Задача не найдена</string>
+    <string name="task_details">Детали задачи</string>
+    <string name="date">Дата</string>
+    <string name="time">Время</string>
+
+    <!-- Экран создания/редактирования -->
+    <string name="create_task">Создать задачу</string>
+    <string name="edit_task">Редактировать задачу</string>
+    <string name="select_date">Выбрать дату</string>
+    <string name="select_date_and_time">Выберите дату и время</string>
+    <string name="adjust_date">Изменить дату</string>
+    <string name="adjust_time">Изменить время</string>
+    <string name="select">Выбрать</string>
+    <string name="cancel">Отмена</string>
+    <string name="day">день</string>
+
+    <!-- Часовые интервалы -->
+    <string name="hour_format">%02d:00 - %02d:00</string>
+
+    <!-- Ошибки -->
+    <string name="error_title_empty">Название не может быть пустым</string>
+    <string name="error_time_invalid">Время окончания должно быть после времени начала</string>
+</resources>

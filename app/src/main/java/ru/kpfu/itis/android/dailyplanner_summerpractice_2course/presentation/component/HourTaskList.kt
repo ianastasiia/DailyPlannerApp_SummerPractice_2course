@@ -11,7 +11,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.model.Task
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -38,7 +40,7 @@ fun HourTaskList(tasks: List<Task>, onTaskClick: (Long) -> Unit) {
                     .padding(8.dp)
             ) {
                 Text(
-                    text = "${startHour}:00 - ${endHour}:00",
+                    text = stringResource(R.string.hour_format, startHour, endHour),
                     style = MaterialTheme.typography.bodyLarge
                 )
 

@@ -10,8 +10,11 @@ import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.data.local.Plann
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.data.mapper.TaskMapper
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.data.repository.TaskRepositoryImpl
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.repository.TaskRepository
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.DeleteTaskUseCase
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.GetTaskByIdUseCase
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.GetTasksByDateUseCase
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.InsertTaskUseCase
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.UpdateTaskUseCase
 import javax.inject.Singleton
 
 @Module
@@ -43,6 +46,24 @@ object AppModule {
     @Singleton
     fun provideGetTaskByIdUseCase(repository: TaskRepository): GetTaskByIdUseCase {
         return GetTaskByIdUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInsertTaskUseCase(repository: TaskRepository): InsertTaskUseCase {
+        return InsertTaskUseCase(taskRepository = repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpdateTaskUseCase(repository: TaskRepository): UpdateTaskUseCase {
+        return UpdateTaskUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteTaskUseCase(repository: TaskRepository): DeleteTaskUseCase {
+        return DeleteTaskUseCase(repository)
     }
 
 }

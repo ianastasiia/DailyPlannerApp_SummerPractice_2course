@@ -1,3 +1,36 @@
 <resources>
-    <string name="app_name">DailyPlanner_SummerPractice_2course</string>
+    <string name="app_name">Daily Planner</string>
+
+    <!-- Common strings -->
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="task_not_found">Task not found</string>
+    <string name="task_details">Task Details</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+
+    <!-- Create/Edit screen -->
+    <string name="create_task">Create Task</string>
+    <string name="edit_task">Edit Task</string>
+    <string name="select_date">Select date</string>
+    <string name="select_date_and_time">Choose date and time</string>
+    <string name="adjust_date">Edit date</string>
+    <string name="adjust_time">Edit time</string>
+    <string name="select">Select</string>
+    <string name="cancel">Cancel</string>
+    <string name="day">day</string>
+
+    <!-- Time intervals -->
+    <string name="hour_format">%02d:00 - %02d:00</string>
+
+    <!-- Errors -->
+    <string name="error_title_empty">Title cannot be empty</string>
+    <string name="error_time_invalid">End time must be after start time</string>
 </resources>
