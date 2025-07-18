@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt.plugin)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "ru.kpfu.itis.android.dailyplanner_summerpractice_2course"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "ru.kpfu.itis.android.dailyplanner_summerpractice_2course"
@@ -42,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.13"
+        kotlinCompilerExtensionVersion = "2.0.0"
     }
     packaging {
         resources {
