@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CalendarViewModel
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CreateEditTaskScreenViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -49,12 +50,12 @@ import java.util.Locale
 fun CreateEditTaskScreen(
     navController: NavController,
     taskId: Long,
-    viewModel: CreateEditTaskScreenViewModel = hiltViewModel()
+    viewModel: CreateEditTaskScreenViewModel = hiltViewModel(),
+    calendarViewModel: CalendarViewModel = hiltViewModel(),
 ) {
     val task by viewModel.task.collectAsState()
     val isSaved by viewModel.isSaved.collectAsState()
     val errors by viewModel.errors.collectAsState()
-    val context = LocalContext.current
 
     LaunchedEffect(taskId) {
         viewModel.loadTask(taskId)
@@ -62,6 +63,7 @@ fun CreateEditTaskScreen(
 
     LaunchedEffect(isSaved) {
         if (isSaved) {
+            calendarViewModel.refreshTasks()
             navController.popBackStack()
         }
     }
@@ -92,7 +94,6 @@ fun CreateEditTaskScreen(
                 .padding(paddingValues)
                 .padding(16.dp)
         ) {
-            // Отображение ошибок
             if (errors.isNotEmpty()) {
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
                     errors.forEach { errorRes ->
@@ -106,7 +107,6 @@ fun CreateEditTaskScreen(
                 }
             }
 
-            // Поле для названия задачи
             OutlinedTextField(
                 value = task.name,
                 onValueChange = viewModel::updateName,
@@ -117,7 +117,6 @@ fun CreateEditTaskScreen(
                 isError = errors.contains(R.string.error_title_empty)
             )
 
-            // Поле для описания
             OutlinedTextField(
                 value = task.description,
                 onValueChange = viewModel::updateDescription,
@@ -129,14 +128,12 @@ fun CreateEditTaskScreen(
                 maxLines = 5
             )
 
-            // Блок выбора времени
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                // Выбор даты и времени начала
                 Column(
                     horizontalAlignment = Alignment.Start
                 ) {
@@ -151,7 +148,6 @@ fun CreateEditTaskScreen(
                     )
                 }
 
-                // Выбор даты и времени окончания
                 Column(
                     horizontalAlignment = Alignment.End
                 ) {
@@ -167,7 +163,7 @@ fun CreateEditTaskScreen(
                 }
             }
 
-            // Кнопка сохранения
+
             Button(
                 onClick = viewModel::saveTask,
                 modifier = Modifier
@@ -227,24 +223,20 @@ fun DatePickerDialog(
         title = { Text(stringResource(R.string.select_date_and_time)) },
         text = {
             Column {
-                // Дата
                 Text(
                     text = stringResource(R.string.date_with_value, formatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
-                // Время
                 Text(
                     text = stringResource(R.string.time_with_value, timeFormatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                // Кнопки для изменения времени
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Кнопки для изменения даты
                     Column {
                         Text(stringResource(R.string.adjust_date))
                         Row {
@@ -257,8 +249,7 @@ fun DatePickerDialog(
                             }
                         }
                     }
-
-                    // Кнопки для изменения времени
+                    
                     Column {
                         Text(stringResource(R.string.adjust_time))
                         Row {

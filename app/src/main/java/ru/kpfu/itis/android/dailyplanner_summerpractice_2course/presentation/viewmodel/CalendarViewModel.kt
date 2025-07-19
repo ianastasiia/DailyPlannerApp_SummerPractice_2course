@@ -10,31 +10,37 @@ import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.model.Tas
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.GetTasksByDateUseCase
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZoneOffset
 import javax.inject.Inject
 
 @HiltViewModel
 class CalendarViewModel @Inject constructor(
     private val getTasksByDateUseCase: GetTasksByDateUseCase,
-): ViewModel() {
+) : ViewModel() {
     private val _selectedDate = MutableStateFlow(LocalDate.now())
-    val selectedDate : StateFlow<LocalDate> = _selectedDate
+    val selectedDate: StateFlow<LocalDate> = _selectedDate
 
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val tasks : StateFlow<List<Task>> = _tasks
+    val tasks: StateFlow<List<Task>> = _tasks
 
     private val _startOfDay = MutableStateFlow(0L)
     val startOfDay: StateFlow<Long> = _startOfDay
 
+    init {
+        loadTasksByDate(LocalDate.now())
+    }
+
     fun selectDate(date: LocalDate) {
-        _selectedDate.value = date
-        loadTasksByDate(date)
+        if (_selectedDate != date) {
+            _selectedDate.value = date
+            loadTasksByDate(date)
+        }
     }
 
     private fun loadTasksByDate(date: LocalDate) {
         viewModelScope.launch {
-            val start = date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
-            val end = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli() - 1
+            val zoneId = ZoneId.systemDefault()
+            val start = date.atStartOfDay(zoneId).toInstant().toEpochMilli()
+            val end = date.plusDays(1).atStartOfDay(zoneId).toInstant().toEpochMilli() - 1
 
             _startOfDay.value = start
             _tasks.value = getTasksByDateUseCase(
@@ -42,5 +48,9 @@ class CalendarViewModel @Inject constructor(
                 dateFinish = end
             )
         }
+    }
+
+    fun refreshTasks() {
+        loadTasksByDate(_selectedDate.value)
     }
 }

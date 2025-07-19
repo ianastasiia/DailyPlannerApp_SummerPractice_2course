@@ -28,6 +28,7 @@ class TaskDetailViewModel @Inject constructor(
     fun deleteTask(taskId: Long) {
         viewModelScope.launch {
             deleteTaskUseCase(taskId)
+            _task.value = null
         }
     }
 }

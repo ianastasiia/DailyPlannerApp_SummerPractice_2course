@@ -27,12 +27,6 @@ fun HourTaskList(tasks: List<Task>, startOfDay: Long, onTaskClick: (Long) -> Uni
         items(24) { hour ->
             val startHour = hour
             val endHour = hour + 1
-//            val hourTasks = tasks.filter { task ->
-//                val taskStartHour = Instant.ofEpochMilli(task.dateStart).atZone(ZoneId.systemDefault()).hour
-//                val taskEndHour = Instant.ofEpochMilli(task.dateFinish).atZone(ZoneId.systemDefault()).hour
-//
-//                (taskStartHour <= endHour && taskEndHour >= startHour)
-//            }
             val hourStartMillis = startOfDay + hour * 3_600_000
             val hourEndMillis = startOfDay + (hour + 1) * 3_600_000
 

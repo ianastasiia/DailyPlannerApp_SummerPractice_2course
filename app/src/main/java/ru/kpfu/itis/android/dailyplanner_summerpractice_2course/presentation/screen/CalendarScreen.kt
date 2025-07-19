@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -50,6 +51,19 @@ fun CalendarScreen(
     val selectedDate by viewModel.selectedDate.collectAsState()
     val tasks by viewModel.tasks.collectAsState()
     val startOfDay by viewModel.startOfDay.collectAsState()
+
+    val backStackEntry = navController.currentBackStackEntry
+    DisposableEffect(backStackEntry) {
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            if (destination.route == Screen.Calendar.route) viewModel.refreshTasks()
+        }
+
+        navController.addOnDestinationChangedListener(listener)
+
+        onDispose {
+            navController.removeOnDestinationChangedListener(listener)
+        }
+    }
 
     Scaffold(
         floatingActionButton = {

@@ -19,14 +19,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.filter
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.navigation.Screen
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CalendarViewModel
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.TaskDetailViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -38,11 +41,21 @@ fun TaskDetailScreen(
     navController: NavController,
     taskId: Long,
     viewModel: TaskDetailViewModel = hiltViewModel(),
+    calendarViewModel: CalendarViewModel = hiltViewModel(),
 ) {
     val task by viewModel.task.collectAsState()
 
     LaunchedEffect(taskId) {
         viewModel.loadTask(taskId)
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { viewModel.task.value }
+            .filter { it == null }
+            .collect {
+                calendarViewModel.refreshTasks()
+                navController.popBackStack()
+            }
     }
 
     Scaffold(
