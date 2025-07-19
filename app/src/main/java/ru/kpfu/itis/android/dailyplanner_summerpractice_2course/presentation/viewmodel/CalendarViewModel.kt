@@ -32,6 +32,7 @@ class CalendarViewModel @Inject constructor(
     fun selectDate(date: LocalDate) {
         if (_selectedDate != date) {
             _selectedDate.value = date
+            _tasks.value = emptyList()
             loadTasksByDate(date)
         }
     }

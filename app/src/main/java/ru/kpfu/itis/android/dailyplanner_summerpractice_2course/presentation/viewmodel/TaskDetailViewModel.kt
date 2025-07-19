@@ -21,7 +21,11 @@ class TaskDetailViewModel @Inject constructor(
 
     fun loadTask(taskId: Long) {
         viewModelScope.launch {
-            _task.value = getTaskByIdUseCase(taskId)
+            try {
+                _task.value = getTaskByIdUseCase(taskId)
+            } catch (e: Exception) {
+                println("Error loading task: ${e.message}")
+            }
         }
     }
 

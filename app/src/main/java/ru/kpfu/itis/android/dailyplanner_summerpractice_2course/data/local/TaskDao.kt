@@ -9,7 +9,7 @@ import androidx.room.Update
 
 @Dao
 interface TaskDao {
-    @Query("SELECT id, name, description, date_start, date_finish FROM tasks WHERE date_start BETWEEN :dateStart AND :dateFinish")
+    @Query("SELECT id, name, description, date_start, date_finish FROM tasks WHERE date_start >= :dateStart AND date_finish < :dateFinish")
     suspend fun getTasksByDate(dateStart: Long, dateFinish: Long): List<TaskEntity>
 
     @Query("SELECT id, name, description, date_start, date_finish FROM tasks WHERE id = :taskId ")

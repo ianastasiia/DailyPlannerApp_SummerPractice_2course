@@ -1,6 +1,5 @@
 package ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase
 
-import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.model.Task
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.repository.TaskRepository
 import javax.inject.Inject
 

@@ -34,14 +34,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.navigation.Screen
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CalendarViewModel
-import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CreateEditTaskScreenViewModel
+import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CreateEditTaskViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -50,7 +50,7 @@ import java.util.Locale
 fun CreateEditTaskScreen(
     navController: NavController,
     taskId: Long,
-    viewModel: CreateEditTaskScreenViewModel = hiltViewModel(),
+    viewModel: CreateEditTaskViewModel = hiltViewModel(),
     calendarViewModel: CalendarViewModel = hiltViewModel(),
 ) {
     val task by viewModel.task.collectAsState()
@@ -65,6 +65,7 @@ fun CreateEditTaskScreen(
         if (isSaved) {
             calendarViewModel.refreshTasks()
             navController.popBackStack()
+            navController.navigate(Screen.CurrentTask.createRoute(taskId = task.id))
         }
     }
 
@@ -224,12 +225,18 @@ fun DatePickerDialog(
         text = {
             Column {
                 Text(
-                    text = stringResource(R.string.date_with_value, formatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(
+                        R.string.date_with_value,
+                        formatter.format(Date(selectedDate))
+                    ), style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 Text(
-                    text = stringResource(R.string.time_with_value, timeFormatter.format(Date(selectedDate))),style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(
+                        R.string.time_with_value,
+                        timeFormatter.format(Date(selectedDate))
+                    ), style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 
@@ -249,7 +256,7 @@ fun DatePickerDialog(
                             }
                         }
                     }
-                    
+
                     Column {
                         Text(stringResource(R.string.adjust_time))
                         Row {

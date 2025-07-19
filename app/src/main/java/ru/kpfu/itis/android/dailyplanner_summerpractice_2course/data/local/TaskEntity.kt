@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tasks")
 data class TaskEntity(
-    @PrimaryKey @ColumnInfo(name="id") val id: Long,
-    @ColumnInfo(name="name") val name: String,
-    @ColumnInfo(name="description") val description: String,
-    @ColumnInfo(name="date_start") val dateStart: Long,
-    @ColumnInfo(name="date_finish") val dateFinish: Long,
+    @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "date_start") val dateStart: Long,
+    @ColumnInfo(name = "date_finish") val dateFinish: Long,
 )

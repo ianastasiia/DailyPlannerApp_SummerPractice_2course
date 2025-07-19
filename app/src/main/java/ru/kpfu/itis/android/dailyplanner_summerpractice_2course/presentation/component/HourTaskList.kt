@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.model.Task
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.ZoneId
 import java.util.Date
 import java.util.Locale
 
@@ -34,7 +32,7 @@ fun HourTaskList(tasks: List<Task>, startOfDay: Long, onTaskClick: (Long) -> Uni
                 task.dateStart < hourEndMillis && task.dateFinish > hourStartMillis
             }
 
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
@@ -44,7 +42,7 @@ fun HourTaskList(tasks: List<Task>, startOfDay: Long, onTaskClick: (Long) -> Uni
                     style = MaterialTheme.typography.bodyLarge
                 )
 
-                hourTasks.forEach { task->
+                hourTasks.forEach { task ->
                     TaskItem(task = task) {
                         onTaskClick(task.id)
                     }
@@ -68,7 +66,7 @@ fun TaskItem(task: Task, onClick: () -> Unit) {
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            Text (
+            Text(
                 text = task.name,
                 style = MaterialTheme.typography.titleMedium
             )

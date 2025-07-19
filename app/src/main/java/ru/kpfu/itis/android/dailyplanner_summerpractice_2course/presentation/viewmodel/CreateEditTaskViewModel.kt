@@ -14,12 +14,20 @@ import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.domain.usecase.U
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateEditTaskScreenViewModel @Inject constructor(
+class CreateEditTaskViewModel @Inject constructor(
     private val getTaskByIdUseCase: GetTaskByIdUseCase,
     private val insertTaskUseCase: InsertTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
 ) : ViewModel() {
-    private val _task = MutableStateFlow(Task(0, "", "", System.currentTimeMillis(), System.currentTimeMillis() + 3_600_000))
+    private val _task = MutableStateFlow(
+        Task(
+            0,
+            "",
+            "",
+            System.currentTimeMillis(),
+            System.currentTimeMillis() + 3_600_000
+        )
+    )
     val task: StateFlow<Task> = _task
 
     private val _isSaved = MutableStateFlow(false)
@@ -80,7 +88,8 @@ class CreateEditTaskScreenViewModel @Inject constructor(
                 if (_task.value.id > 0) {
                     updateTaskUseCase(_task.value)
                 } else {
-                    insertTaskUseCase(_task.value)
+                    val newId = insertTaskUseCase(_task.value)
+                    _task.value = _task.value.copy(id = newId)
                 }
                 _isSaved.value = true
             }

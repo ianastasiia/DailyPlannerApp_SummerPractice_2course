@@ -19,14 +19,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import kotlinx.coroutines.flow.filter
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.R
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.navigation.Screen
 import ru.kpfu.itis.android.dailyplanner_summerpractice_2course.presentation.viewmodel.CalendarViewModel
@@ -46,17 +44,10 @@ fun TaskDetailScreen(
     val task by viewModel.task.collectAsState()
 
     LaunchedEffect(taskId) {
+        println("Loading task with ID: $taskId")
         viewModel.loadTask(taskId)
     }
 
-    LaunchedEffect(Unit) {
-        snapshotFlow { viewModel.task.value }
-            .filter { it == null }
-            .collect {
-                calendarViewModel.refreshTasks()
-                navController.popBackStack()
-            }
-    }
 
     Scaffold(
         topBar = {
@@ -78,7 +69,6 @@ fun TaskDetailScreen(
                     }
                     IconButton(onClick = {
                         viewModel.deleteTask(taskId)
-                        navController.popBackStack()
                     }) {
                         Icon(
                             Icons.Default.Delete,
@@ -91,7 +81,7 @@ fun TaskDetailScreen(
     ) { paddingValues ->
 
         task?.let {
-
+            println("Task loaded: $it ${it.id}")
             Column(
                 modifier = Modifier
                     .fillMaxSize()
