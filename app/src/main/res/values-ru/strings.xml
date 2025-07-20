@@ -35,5 +35,6 @@
 
     <!-- Ошибки -->
     <string name="error_title_empty">Название не может быть пустым</string>
+    <string name="no_description">Нет описания</string>
     <string name="error_time_invalid">Время окончания должно быть после времени начала</string>
 </resources>

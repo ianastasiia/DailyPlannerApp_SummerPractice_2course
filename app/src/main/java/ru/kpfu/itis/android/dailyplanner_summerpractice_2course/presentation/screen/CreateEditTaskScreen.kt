@@ -13,18 +13,24 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -75,17 +81,23 @@ fun CreateEditTaskScreen(
                 title = {
                     Text(
                         if (taskId > 0) stringResource(R.string.edit_task)
-                        else stringResource(R.string.create_task)
+                        else stringResource(R.string.create_task),
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             Icons.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.back)
+                            contentDescription = stringResource(R.string.back),
+                            tint = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground
+                )
             )
         }
     ) { paddingValues ->
@@ -94,6 +106,7 @@ fun CreateEditTaskScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             if (errors.isNotEmpty()) {
                 Column(modifier = Modifier.padding(bottom = 16.dp)) {
@@ -115,7 +128,13 @@ fun CreateEditTaskScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
-                isError = errors.contains(R.string.error_title_empty)
+                isError = errors.contains(R.string.error_title_empty),
+                textStyle = MaterialTheme.typography.bodyLarge,
+                shape = RoundedCornerShape(12.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                )
             )
 
             OutlinedTextField(
@@ -169,10 +188,19 @@ fun CreateEditTaskScreen(
                 onClick = viewModel::saveTask,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(50.dp),
-                enabled = errors.isEmpty()
+                    .height(50.dp)
+                    .padding(top = 8.dp),
+                enabled = errors.isEmpty(),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
+                )
             ) {
-                Text(stringResource(R.string.save))
+                Text(
+                    text = stringResource(R.string.save),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
         }
     }

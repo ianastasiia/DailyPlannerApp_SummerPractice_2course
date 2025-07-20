@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -68,7 +70,10 @@ fun CalendarScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(Screen.CreateEditTask.createRoute()) }
+                onClick = { navController.navigate(Screen.CreateEditTask.createRoute()) },
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                shape = CircleShape
             ) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add))
             }
@@ -115,13 +120,20 @@ fun CalendarView(
         firstDayOfWeek = DayOfWeek.MONDAY
     )
 
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+    ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             daysOfWeek.forEach { dayOfWeek ->
                 Text(
                     text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
-                    modifier = Modifier.weight(1f),
-                    textAlign = TextAlign.Center
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 8.dp),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
                 )
             }
         }
@@ -132,6 +144,7 @@ fun CalendarView(
                 Day(
                     day = day,
                     isSelected = selectedDate == day.date,
+                    isToday = LocalDate.now() == day.date,
                     onClick = { onDayClick(day.date) }
                 )
             }
@@ -143,20 +156,37 @@ fun CalendarView(
 fun Day(
     day: CalendarDay,
     isSelected: Boolean,
+    isToday: Boolean,
     onClick: () -> Unit
 ) {
+    val backgroundColor = when {
+        isSelected -> MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)
+        isToday -> MaterialTheme.colorScheme.tertiary.copy(alpha = 0.1f)
+        else -> Color.Transparent
+    }
+
+    val textColor = when {
+        isSelected -> MaterialTheme.colorScheme.primary
+        isToday -> MaterialTheme.colorScheme.tertiary
+        else -> MaterialTheme.colorScheme.onBackground
+    }
+
     Box(
         modifier = Modifier
             .aspectRatio(1f)
-            .padding(2.dp)
+            .padding(4.dp)
             .background(
-                color = if (isSelected) Color.Blue.copy(alpha = 0.3f) else Color.Transparent,
+                color = backgroundColor,
                 shape = CircleShape
             )
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(text = day.date.dayOfMonth.toString())
+        Text(
+            text = day.date.dayOfMonth.toString(),
+            color = textColor,
+            fontWeight = if (isSelected || isToday) FontWeight.Bold else FontWeight.Normal
+        )
     }
 }
 

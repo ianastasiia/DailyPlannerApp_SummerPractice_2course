@@ -35,5 +35,6 @@
 
     <!-- Errors -->
     <string name="error_title_empty">Title cannot be empty</string>
+    <string name="no_description">No description provided</string>
     <string name="error_time_invalid">End time must be after start time</string>
 </resources>
